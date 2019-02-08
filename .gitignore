@@ -21,6 +21,8 @@
 *.zip
 *.csv
 *.key
+*.xls
+*.xls
 
 # Logs and databases #
 ######################
