@@ -22,7 +22,7 @@
 *.csv
 *.key
 *.xls
-*.xls
+*.xlsx
 
 # Logs and databases #
 ######################
