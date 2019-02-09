@@ -1,14 +1,7 @@
-library(readxl)
-library(dplyr)
 setwd("~/Documents/NYCDSA/Bootcamp_Winter_2019/Project2-ShinyApp")
+library(data.table)
 
-source("./clean_data.R")
+fname = "all_data.csv"
+path = paste0("./data/", fname)
 
-dataset = data.frame()
-lst_fnames = read.csv("./data/lst_fnames.txt", header = FALSE)[[1]]
-for (fname in lst_fnames){
-  path = paste0("./data/", fname)
-  temp = data.frame(read_xlsx(path = path, sheet = 1, col_names = TRUE), stringsAsFactors = FALSE)
-  temp = clean_df(temp)
-  dataset = rbind(dataset, temp)
-}
+main_df = fread(file = path)

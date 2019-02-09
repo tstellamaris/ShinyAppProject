@@ -1,3 +1,15 @@
+setwd("~/Documents/NYCDSA/Bootcamp_Winter_2019/Project2-ShinyApp")
+library(readxl)
+library(dplyr)
+
+
+# ********************************************************************************************************* # 
+# This script is clean the raw data, concatenate all files and save it as a unique csv file.                #
+# This file is going to be load at the Shiny App.                                                           #
+# The purpose of this step is to load the data quicker when the user opens the Shiny App.                   #
+#                                                                                                           #
+# ********************************************************************************************************* #
+
 
 select_col <- function(df){
   # ***************************************************************************** #
@@ -151,3 +163,14 @@ clean_df <- function(df){
   return (df)
 }
 
+
+dataset = data.frame()
+lst_fnames = read.csv("./data/lst_fnames.txt", header = FALSE)[[1]]
+for (fname in lst_fnames){
+  path = paste0("./data/", fname)
+  temp = data.frame(read_xlsx(path = path, sheet = 1, col_names = TRUE), stringsAsFactors = FALSE)
+  temp = clean_df(temp)
+  dataset = rbind(dataset, temp)
+}
+
+write.csv(dataset, "./data/all_data.csv")
