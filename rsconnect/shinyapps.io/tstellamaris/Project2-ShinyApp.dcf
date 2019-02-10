@@ -1,0 +1,12 @@
+name: Project2-ShinyApp
+title: Project2-ShinyApp
+username:
+account: tstellamaris
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 704272
+bundleId: 1866427
+url: https://tstellamaris.shinyapps.io/Project2-ShinyApp/
+when: 1549761629.27954
+asMultiple: FALSE
+asStatic: FALSE
