@@ -20,7 +20,7 @@ mutate_df <- function(df){
   # ***************************************************************************** #
   unincorporsted_ter = c("puerto rico", "pr", "guam", "gu", "virgin islands", "vi", 
                          "mh", "northern mariana islands", "marshall islands", 
-                         "federated states of micronesia")
+                         "federated states of micronesia", "mp")
   colnames(df) = tolower(colnames(df))
   colnames(df) = gsub(colnames(df), pattern = "_9089", replacement = "")
   df = df %>% 
@@ -47,7 +47,7 @@ remove_null <- function(x){
   # Input: content of the data frame                                              #
   # Return: NA if the content is "NULL" or the content if not                     #
   # ***************************************************************************** #
-  return (ifelse(x == "NULL", NA, x))
+  return (ifelse(x == "NULL" | x == "null", NA, x))
 }
 
 set_numeric <- function(x){
@@ -164,8 +164,10 @@ clean_df <- function(df){
               employer_yr_estab = set_numeric(employer_yr_estab),
               job_title = set_char(pw_soc_title),
               pw_amount = sapply(pw_unit_of_pay, transf_yearly) * pw_amount,
+              pw_unit_pay = set_char(pw_unit_of_pay),
               wage_offer_mean = (sapply(wage_offer_unit_of_pay, transf_yearly) * wage_offer_from / 2) +
                 (sapply(wage_offer_unit_of_pay, transf_yearly) * wage_offer_to / 2),
+              wage_offer_unit_pay = set_char(wage_offer_unit_of_pay),
               work_city = set_char(job_info_work_city),
               work_state = toupper(sapply(set_char(job_info_work_state), transf_state)),
               job_info_job_title = set_char(job_info_job_title),
@@ -191,6 +193,22 @@ for (fname in lst_fnames){
   path = paste0("./data/", fname)
   temp = data.frame(read_xlsx(path = path, sheet = 1, col_names = TRUE), stringsAsFactors = FALSE)
   temp = clean_df(temp)
+  
+  # There are some cleared wrong observations on the wage information.
+  # For example, there are some employee that is earning more than 100,000 dolars per hour
+  # So, I decided to remove all observations that is more than the maximum value per year (when the unit is "year")
+  # after the transformation.
+  pw_max = temp %>% 
+    na.omit() %>% 
+    filter(pw_unit_pay == "year") %>% 
+    summarise(max_y = max(pw_amount))
+  wo_max = temp %>% 
+    na.omit() %>% 
+    filter(wage_offer_unit_pay == "year") %>% 
+    summarise(max_y = max(wage_offer_mean))
+  temp = temp %>%
+    filter(pw_amount <= pw_max[1,1] & wage_offer_mean <= wo_max[1,1])
+  
   dataset = rbind(dataset, temp)
 }
 

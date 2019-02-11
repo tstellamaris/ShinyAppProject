@@ -37,7 +37,7 @@ shinyUI(dashboardPage(
                 tabBox(title = "Graph Options", id = "tabset1", width = 12,
                        tabPanel("Tab 1","First tab content"),
                        tabPanel("Tab 2", "Second tab content")))
-      ),
+              ),
       # Chart 2: Company tab ####
       tabItem(tabName = "company",
               fluidRow(
@@ -50,13 +50,41 @@ shinyUI(dashboardPage(
               "to be replaced"
               ),
       # Map tab ####
-      tabItem(tabName = "map", "map here"
-              #fluidRow(box(htmlOutput("map_usa")))
+      tabItem(tabName = "map",
+              fluidRow(
+                tabBox(id = "tabset_map", width = 12, height = 800,
+                       tabPanel("From: Country of Citizenship",
+                                column(selectInput("var_map", 
+                                            label = "Choose a variable to display",
+                                            choices = c("Number of Applicants", 
+                                                        "Wage Offer Mean"),
+                                            selected = "Number of Applicants"), width = 4),
+                                column(sliderInput("year_map", 
+                                            label = "Year:",
+                                            min = min_year, max = max_year, value = c(min_year, max_year), 
+                                            step = 1), width = 4),
+                                column(checkboxGroupInput("edu_map", label = ("Choose the education level"), 
+                                                          choices = education,
+                                                          selected = education), width = 4),
+                                box(htmlOutput("map_glob"), width = 12)),
+                       tabPanel("To: USA State", 
+                                column(selectInput("var_map_usa", 
+                                                   label = "Choose a variable to display",
+                                                   choices = c("Number of Applicants", 
+                                                               "Wage Offer Mean"),
+                                                   selected = "Number of Applicants"), width = 4),
+                                column(sliderInput("year_map_usa", 
+                                                   label = "Year:",
+                                                   min = min_year, max = max_year, value = c(min_year, max_year), 
+                                                   step = 1), width = 4),
+                                column(checkboxGroupInput("edu_map_usa", label = ("Choose the education level"), 
+                                                          choices = education,
+                                                          selected = education), width = 4),
+                                box(htmlOutput("map_usa"), width = 12))))
               ),
       # About tab ####
-      tabItem(tabName = "about", "about here"
-              #fluidRow(box(htmlOutput("map_usa")))
+      tabItem(tabName = "about", "about here")
       )
     )
   )
-))
+)
