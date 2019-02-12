@@ -1,8 +1,18 @@
 order_lst <- function(lis){
+  # ***************************************************************************** #
+  # Order a list                                                                  #
+  # Input: list                                                                   #
+  # Return: list ordered                                                          #
+  # ***************************************************************************** #
   lis = lis[order(lis)]
 }
 
 mutate_edu <- function(x){
+  # ***************************************************************************** #
+  # Padronize the education level (substitute every other content to "Other")     #
+  # Input: content of the data frame                                              #
+  # Return: content   padronized                                                  #
+  # ***************************************************************************** #
   edu = c("High School", "Associate's", "Bachelor's", "Master's", "Doctorate", "Other")
   return (ifelse(!x %in% edu, "Other", x))
 }
@@ -19,6 +29,12 @@ capitalize <- function(x) {
 
 
 transf_state <- function(df){
+  # ***************************************************************************** #
+  # Left join the input data frame with the state data frame by the short name    #
+  # of the state.                                                                 #
+  # Input: data frame                                                             #
+  # Return: data frame joined                                                     #
+  # ***************************************************************************** #
   long_state = c("alabama", "alaska", "arizona", "arkansas", "california",
                 "colorado", "connecticut", "delaware", "florida", "georgia", 
                 "hawaii", "idaho", "illinois", "indiana", "iowa",

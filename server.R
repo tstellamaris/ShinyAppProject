@@ -402,59 +402,6 @@ shinyServer(function(input, output){
   
   
   
-  # Pie Chart: Global ####
-  # 
-  # df_pie_glob <- reactive({
-  #   if (input$text == ""){
-  #     if (input$var_map == "Number of Applicants"){
-  #       main_df %>%
-  #         na.omit() %>%
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = n()) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     } else {
-  #       main_df %>%
-  #         na.omit() %>%
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = mean(wage_offer_mean)) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     }
-  #   } else {
-  #     if (input$var_map == "Number of Applicants"){
-  #       main_df %>%
-  #         na.omit() %>%
-  #         filter(country_of_citizenship == input$text) %>% 
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = n()) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     } else {
-  #       main_df %>%
-  #         na.omit() %>%
-  #         filter(country_of_citizenship == input$text) %>% 
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = mean(wage_offer_mean)) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     }
-  #   }
-  # })
-  # 
-  # output$pie_glob <- renderPlot({
-  #   df_pie_glob = df_pie_glob()
-  #   ggplot(data2, aes(x = 1, y = vari)) +
-  #     geom_bar(aes(fill = job_info_job_title), stat = "identity") +
-  #     coord_polar(theta = "y") +
-  #     labs(x='Job Title',
-  #          y=input$var_map) +
-  #     scale_fill_discrete(name = "Job Title") +
-  #     theme_bw() 
-  # })
-  
-
-  
   # Map tab: USA map ####
   df_map_usa <- reactive({
     main_df %>%
@@ -514,58 +461,6 @@ shinyServer(function(input, output){
       df_box_us$job_info_job_title[df_box_us[,5]==min_value]
     infoBox(min_job_title, min_value, icon = icon("hand-o-down"))
   })
-
-  # Pie Chart: USA ####
-  # output$dtselect_us <- renderText({input$text})
-  # 
-  # df_pie_us <- reactive({
-  #   if (input$text == ""){
-  #     if (input$var_map_usa == "Number of Applicants"){
-  #       main_df %>%
-  #         na.omit() %>%
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = n()) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     } else {
-  #       main_df %>%
-  #         na.omit() %>%
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = mean(wage_offer_mean)) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     }
-  #   } else {
-  #     if (input$var_map_usa == "Number of Applicants"){
-  #       main_df %>%
-  #         na.omit() %>%
-  #         filter(work_state == input$text) %>% 
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = n()) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     } else {
-  #       main_df %>%
-  #         na.omit() %>%
-  #         filter(work_state == input$text) %>% 
-  #         group_by(job_info_job_title) %>% 
-  #         summarise(vari = mean(wage_offer_mean)) %>% 
-  #         arrange(desc(vari)) %>% 
-  #         top_n(5, vari)
-  #     }
-  #   }
-  # })
-  # 
-  # output$pie_us <- renderPlot({
-  #   df_pie_us = df_pie_us()
-  #   ggplot(data2, aes(x = 1, y = vari)) +
-  #     geom_bar(aes(fill = job_info_job_title), stat = "identity") +
-  #     coord_polar(theta = "y") +
-  #     labs(x='Job Title',
-  #          y=input$var_map) +
-  #     scale_fill_discrete(name = "Job Title") +
-  #     theme_bw() 
-  # })
 
   
 })

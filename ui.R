@@ -103,7 +103,6 @@ shinyUI(dashboardPage(
                                 hr(),
                                 fluidRow(infoBoxOutput("max_box_gl", width = 6),
                                          infoBoxOutput("min_box_gl", width = 6))),
-                                #plotOutput("pie_glob")),
                        tabPanel("To: USA State", 
                                 column(selectInput("var_map_usa", 
                                                    label = "Choose a variable to display",
@@ -124,7 +123,6 @@ shinyUI(dashboardPage(
                                 hr(),
                                 fluidRow(infoBoxOutput("max_box_us", width = 6),
                                          infoBoxOutput("min_box_us", width = 6)))
-                                #plotOutput("pie_us"))
                        ))
               ),
       # About tab ####
