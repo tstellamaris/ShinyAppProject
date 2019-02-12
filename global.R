@@ -1,10 +1,12 @@
-# Install and Load Appropriate Packages
-list.of.packages <- c("data.table", "shiny", "ggplot2", "dplyr", "rgdal", "leaflet", "RColorBrewer", "googleVis")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-
-if(length(new.packages)) install.packages(new.packages)
-
-lapply(list.of.packages, require, character.only = TRUE)
+library(data.table)
+library(shiny)
+library(ggplot2)
+library(dplyr)
+library(rgdal)
+library(leaflet)
+library(RColorBrewer)
+library(googleVis)
+library(ggthemes)
 
 # Read functions script
 source("./helper.R")
@@ -16,15 +18,13 @@ main_df = fread(file = path)
 
 # Mutate data
 main_df = main_df %>% 
-  mutate(worker_education = sapply(worker_education, mutate_edu))
+  mutate(worker_education = sapply(worker_education, mutate_edu)) %>% 
+  transf_state()
+
 
 # Lists
 visastatus = order_lst(unique(main_df$case_status))
-education = order_lst(unique(main_df$worker_education))
-#country = order_lst(unique(main_df$country_of_citizenship))
-#state = order_lst(unique(main_df$work_state))
-#company = order_lst(unique(main_df$employer_name))
-#job_title = order_lst(unique(main_df$jobtitle))
+education = c("High School", "Associate's", "Bachelor's", "Master's", "Doctorate", "Other")
 
 
 # Variables
