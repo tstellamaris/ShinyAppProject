@@ -25,7 +25,8 @@ main_df = main_df %>%
 # Lists
 visastatus = order_lst(unique(main_df$case_status))
 education = c("High School", "Associate's", "Bachelor's", "Master's", "Doctorate", "Other")
-
+country = order_lst(unique(main_df$country_of_citizenship))
+state = order_lst(unique(main_df$long_state))
 
 # Variables
 min_year = min(main_df$year)

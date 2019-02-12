@@ -5,9 +5,9 @@ account: tstellamaris
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 704272
-bundleId: 1869696
+bundleId: 1872095
 url: https://tstellamaris.shinyapps.io/Project2-ShinyApp/
-when: 1549912943.47682
+when: 1549993436.81589
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .RData|clean_data.R|load_file_online.R

@@ -22,10 +22,28 @@ shinyUI(dashboardPage(
   # Body ####
   dashboardBody(
     tabItems(
+      
       # Home tab ####
       tabItem(tabName = "home",
-              fluidRow(box(h2("Box content here"), br(), "More content", width = 12))
+              fluidRow(box(h3("Data Visulization and Analysis about Work Visas Applicattions"), 
+                           br(), "Approximately 140,000 immigrant visas are available each fiscal year 
+                           for aliens who seek to immigrate in the USA based on their job skills*.", br(),
+                           "This app aims to be a tool for both american companies and workers 
+                           to visualize and analyze what skills some companies is looking 
+                           for outsite of the USA to fullfill their position", br(), br(),
+                           "* Information from ",  a(href="https://www.uscis.gov/working-united-states/permanent-workers", 
+                                                     "US Citizenship and Immigration Service"), 
+                           "website.", width = 12)),
+              fluidRow(box(strong("About the App"), br(),
+                           "All tabs are found on the left side of the app with the following description:", 
+                           br(),
+                           "Chart: bar plots and box plot about the number of visa applicants per
+                           year (Visa subtab) and the job requirements (Job Information subtab).",
+                           br(),
+                           "Map: global map about the worker citizenship and USA map about the 
+                           state where the employee is working.", width = 12))
               ),
+      
       # Chart 1: Visa tab ####
       tabItem(tabName = "visa",
               fluidRow(
@@ -37,7 +55,7 @@ shinyUI(dashboardPage(
                                         selected = education), width = 6), width = 12),
                 box(plotOutput("visa_g"),width = 12))
               ),
-      # Chart 2: Company tab ####
+      # Chart 2: Job Information tab ####
       tabItem(tabName = "company",
               fluidRow(
                 box(textInput("com_name", label = "Search by company name", 
@@ -51,7 +69,7 @@ shinyUI(dashboardPage(
                                 selected = "Number of Applicants"), width = 4)
               ),
               fluidRow(
-                tabBox(title = "Graph Options", id = "tabset1", width = 12, height = 600,
+                tabBox(title = "Graph Options", id = "tabset1", width = 12, height = 580,
                        tabPanel("Companies", 
                                 plotOutput("comp_comp")),
                        tabPanel("Job Title", 
@@ -64,7 +82,7 @@ shinyUI(dashboardPage(
       # Map tab ####
       tabItem(tabName = "map",
               fluidRow(
-                tabBox(id = "tabset_map", width = 12, height = 800,
+                tabBox(id = "tabset_map", width = 12, height = 1200,
                        tabPanel("From: Country of Citizenship",
                                 column(selectInput("var_map", 
                                             label = "Choose a variable to display",
@@ -79,7 +97,13 @@ shinyUI(dashboardPage(
                                                           choices = education,
                                                           selected = education), width = 4),
                                 hr(),
-                                box(htmlOutput("map_glob"), width = 12)),
+                                box(htmlOutput("map_glob"), width = 12),
+                                hr(),
+                                fluidRow(column(10,align = "center", h3(textOutput("dtselect")))),
+                                hr(),
+                                fluidRow(infoBoxOutput("max_box_gl", width = 6),
+                                         infoBoxOutput("min_box_gl", width = 6))),
+                                #plotOutput("pie_glob")),
                        tabPanel("To: USA State", 
                                 column(selectInput("var_map_usa", 
                                                    label = "Choose a variable to display",
@@ -94,10 +118,35 @@ shinyUI(dashboardPage(
                                                           choices = education,
                                                           selected = education), width = 4),
                                 hr(),
-                                box(htmlOutput("map_usa"), width = 12))))
+                                box(htmlOutput("map_usa"), width = 12),
+                                hr(),
+                                fluidRow(column(10,align = "center", h3(textOutput("dtselect_us")))),
+                                hr(),
+                                fluidRow(infoBoxOutput("max_box_us", width = 6),
+                                         infoBoxOutput("min_box_us", width = 6)))
+                                #plotOutput("pie_us"))
+                       ))
               ),
       # About tab ####
-      tabItem(tabName = "about", "about here")
+      tabItem(tabName = "about", 
+              fluidRow(box(strong("About the author"), 
+                          br(), "Stella Oliveira is a NYC Data Science fellow. This Shiny App is her
+                          second project for the bootcamp.", br(), 
+                          "She holds a bachelor degree in Physics from 
+                          University of Sao Paulo, Brazil. She has 5 years of experience in the finance 
+                          industry where she works at middle office and market risk teams. 
+                          Prior to join the bootcamp, she also worked in a non-profit
+                          organization based in NYC to help them to clean and organize their database.", 
+                       width = 12)),
+              fluidRow(box(strong("Source"), 
+                          br(), "The raw dataset was download from ", 
+                          a(href="https://www.foreignlaborcert.doleta.gov/performancedata.cfm", "foreignlaborcert.doleta.gov"),
+                          "website.",
+                          br(),
+                          "The data was cleaned and saved as a csv file, which one was loaded by
+                          this app.", br(),
+                          "All scripts may be found ", 
+                          a(href="https://github.com/tstellamaris/ShinyAppProject", "here."), width = 12)))
       )
     )
   )

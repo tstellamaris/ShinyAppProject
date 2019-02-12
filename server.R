@@ -358,8 +358,100 @@ shinyServer(function(input, output){
     gvisGeoChart(df_map_glob,
                  "country_of_citizenship", 
                  ifelse(input$var_map == "Number of Applicants", "n_app", "wage_offer"),
-                 options=list(width="auto", height="auto"))
+                 options=list(width="auto", height="auto", 
+                              gvis.listener.jscode = "var text = data.getValue(chart.getSelection()[0].row,0);Shiny.onInputChange('text', text.toString());"))
   })
+  
+  # Statistical Information: Global ####
+   output$dtselect <- renderText({input$text})
+  
+  df_box_glob_click <- reactive({
+    tryCatch({
+      main_df %>%
+        na.omit() %>%
+        filter((worker_education %in% input$edu_map) &
+                 (year >= input$year_map[1] & year <= input$year_map[2]) &
+                 country_of_citizenship == input$text) %>%
+        group_by(employer_name, job_info_job_title) %>%
+        summarise(n_app = n(), max_wage_offer = max(wage_offer_mean), min_wage_offer = min(wage_offer_mean))
+    }, error=function(e) {
+      main_df %>%
+        na.omit() %>%
+        filter((worker_education %in% input$edu_map) &
+                 (year >= input$year_map[1] & year <= input$year_map[2])) %>%
+        group_by(employer_name, job_info_job_title) %>%
+        summarise(n_app = n(), max_wage_offer = max(wage_offer_mean), min_wage_offer = min(wage_offer_mean))
+    })
+  })
+  
+  output$max_box_gl <- renderInfoBox({
+    df_box_glob = df_box_glob_click()
+    max_value = max(df_box_glob[,4])
+    max_job_title <- 
+      df_box_glob$job_info_job_title[df_box_glob[,4]==max_value]
+    infoBox(max_job_title, max_value, icon = icon("hand-o-up"))
+  })
+  
+  output$min_box_gl <- renderInfoBox({
+    df_box_glob = df_box_glob_click()
+    min_value <- min(df_box_glob[,5])
+    min_job_title <- 
+      df_box_glob$job_info_job_title[df_box_glob[,5]==min_value]
+    infoBox(min_job_title, min_value, icon = icon("hand-o-down"))
+  })
+  
+  
+  
+  # Pie Chart: Global ####
+  # 
+  # df_pie_glob <- reactive({
+  #   if (input$text == ""){
+  #     if (input$var_map == "Number of Applicants"){
+  #       main_df %>%
+  #         na.omit() %>%
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = n()) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     } else {
+  #       main_df %>%
+  #         na.omit() %>%
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = mean(wage_offer_mean)) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     }
+  #   } else {
+  #     if (input$var_map == "Number of Applicants"){
+  #       main_df %>%
+  #         na.omit() %>%
+  #         filter(country_of_citizenship == input$text) %>% 
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = n()) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     } else {
+  #       main_df %>%
+  #         na.omit() %>%
+  #         filter(country_of_citizenship == input$text) %>% 
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = mean(wage_offer_mean)) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     }
+  #   }
+  # })
+  # 
+  # output$pie_glob <- renderPlot({
+  #   df_pie_glob = df_pie_glob()
+  #   ggplot(data2, aes(x = 1, y = vari)) +
+  #     geom_bar(aes(fill = job_info_job_title), stat = "identity") +
+  #     coord_polar(theta = "y") +
+  #     labs(x='Job Title',
+  #          y=input$var_map) +
+  #     scale_fill_discrete(name = "Job Title") +
+  #     theme_bw() 
+  # })
   
 
   
@@ -380,7 +472,100 @@ shinyServer(function(input, output){
                  ifelse(input$var_map_usa == "Number of Applicants", "n_app", "wage_offer"),
                  options=list(region="US", displayMode="regions", 
                               resolution="provinces",
-                              width="auto", height="auto"))
+                              width="auto", height="auto",
+                              gvis.listener.jscode = "var text = data.getValue(chart.getSelection()[0].row,0);Shiny.onInputChange('text2', text.toString());"))
   })
+  
+  
+  # Statistical Information: USA ####
+  output$dtselect_us <- renderText({input$text2})
+  
+  df_box_us_click <- reactive({
+    tryCatch({
+      main_df %>%
+        na.omit() %>%
+        filter((worker_education %in% input$edu_map) &
+                 (year >= input$year_map[1] & year <= input$year_map[2]) &
+                 long_state == input$text2) %>%
+        group_by(employer_name, job_info_job_title) %>%
+        summarise(n_app = n(), max_wage_offer = max(wage_offer_mean), min_wage_offer = min(wage_offer_mean))
+    }, error=function(e) {
+      main_df %>%
+        na.omit() %>%
+        filter((worker_education %in% input$edu_map) &
+                 (year >= input$year_map[1] & year <= input$year_map[2])) %>%
+        group_by(employer_name, job_info_job_title) %>%
+        summarise(n_app = n(), max_wage_offer = max(wage_offer_mean), min_wage_offer = min(wage_offer_mean))
+    })
+  })
+  
+  output$max_box_us <- renderInfoBox({
+    df_box_us = df_box_us_click()
+    max_value = max(df_box_us[,4])
+    max_job_title <- 
+      df_box_us$job_info_job_title[df_box_us[,4]==max_value]
+    infoBox(max_job_title, max_value, icon = icon("hand-o-up"))
+  })
+  
+  output$min_box_us <- renderInfoBox({
+    df_box_us = df_box_us_click()
+    min_value <- min(df_box_us[,5])
+    min_job_title <- 
+      df_box_us$job_info_job_title[df_box_us[,5]==min_value]
+    infoBox(min_job_title, min_value, icon = icon("hand-o-down"))
+  })
+
+  # Pie Chart: USA ####
+  # output$dtselect_us <- renderText({input$text})
+  # 
+  # df_pie_us <- reactive({
+  #   if (input$text == ""){
+  #     if (input$var_map_usa == "Number of Applicants"){
+  #       main_df %>%
+  #         na.omit() %>%
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = n()) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     } else {
+  #       main_df %>%
+  #         na.omit() %>%
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = mean(wage_offer_mean)) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     }
+  #   } else {
+  #     if (input$var_map_usa == "Number of Applicants"){
+  #       main_df %>%
+  #         na.omit() %>%
+  #         filter(work_state == input$text) %>% 
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = n()) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     } else {
+  #       main_df %>%
+  #         na.omit() %>%
+  #         filter(work_state == input$text) %>% 
+  #         group_by(job_info_job_title) %>% 
+  #         summarise(vari = mean(wage_offer_mean)) %>% 
+  #         arrange(desc(vari)) %>% 
+  #         top_n(5, vari)
+  #     }
+  #   }
+  # })
+  # 
+  # output$pie_us <- renderPlot({
+  #   df_pie_us = df_pie_us()
+  #   ggplot(data2, aes(x = 1, y = vari)) +
+  #     geom_bar(aes(fill = job_info_job_title), stat = "identity") +
+  #     coord_polar(theta = "y") +
+  #     labs(x='Job Title',
+  #          y=input$var_map) +
+  #     scale_fill_discrete(name = "Job Title") +
+  #     theme_bw() 
+  # })
+
   
 })
